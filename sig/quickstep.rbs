@@ -1,0 +1,7 @@
+module Quickstep
+  def self.included: (untyped) -> untyped
+  module ClassMethods
+    def call: (*untyped) -> untyped
+  end
+  def step: (Result::Success | Result::Failure) -> (Result::Success | bot)
+end

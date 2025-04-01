@@ -1,0 +1,20 @@
+module Quickstep
+  module Result
+    class Success
+      def value: -> untyped
+      def initialize: (untyped) -> void
+      def success?: -> true
+      def failure?: -> false
+      def inspect: -> String
+    end
+    class Failure
+      def value: -> untyped
+      def initialize: (untyped) -> void
+      def success?: -> false
+      def failure?: -> true
+      def inspect: -> String
+    end
+    def Success: (untyped) -> Quickstep::Result::Success
+    def Failure: (untyped) -> Quickstep::Result::Failure
+  end
+end
