@@ -8,12 +8,21 @@ module Quickstep
 
   def self.included(base)
     base.extend(ClassMethods)
+    base.prepend(InstanceMethods)
   end
 
   module ClassMethods
     def call(*args)
       catch :halt do
         new.call(*args)
+      end
+    end
+  end
+
+  module InstanceMethods
+    def call(*args)
+      catch :halt do
+        super
       end
     end
   end

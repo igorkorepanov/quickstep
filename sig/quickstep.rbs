@@ -3,5 +3,8 @@ module Quickstep
   module ClassMethods
     def call: (*untyped) -> untyped
   end
+  module InstanceMethods
+    def call: (*untyped) -> untyped
+  end
   def step: (Result::Success | Result::Failure) -> (Result::Success | bot)
 end

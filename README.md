@@ -3,7 +3,7 @@
 
 # Quickstep
 
-QQuickstep is a lightweight business operation tool inspired by [dry-operation](https://github.com/dry-rb/dry-operation). It provides a structured way to execute multi-step operations with built-in success and failure handling.
+Quickstep is a lightweight business operation tool inspired by [dry-operation](https://github.com/dry-rb/dry-operation). It provides a structured way to execute multi-step operations with built-in success and failure handling.
 
 ## Installation
 
@@ -47,8 +47,9 @@ class MyOperation
   end
 end
 
-operation = MyOperation.new
-result = operation.call(valid: true, value: 5)
+result = MyOperation.new.call(valid: true, value: 5)
+# or
+# result = MyOperation.call(valid: true, value: 5)
 
 if result.success?
   puts "Success: #{result.value}"
