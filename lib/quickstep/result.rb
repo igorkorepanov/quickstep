@@ -42,11 +42,11 @@ module Quickstep
       end
     end
 
-    def Success(value)
+    def Success(value = :ok)
       Success.new(value)
     end
 
-    def Failure(value)
+    def Failure(value = :error)
       Failure.new(value)
     end
   end
