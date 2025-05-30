@@ -38,6 +38,12 @@ RSpec.describe Quickstep::Result do
         expect(result.inspect).to eq('Success({:code=>:ok, :data=>:data})')
       end
     end
+
+    it 'returns true for Success() with no arguments' do
+      result = Success()
+      expect(result).to be_success
+      expect(result.inspect).to eq('Success(:ok)')
+    end
   end
 
   describe '#Failure' do
@@ -74,6 +80,12 @@ RSpec.describe Quickstep::Result do
       else
         expect(result.inspect).to eq('Failure({:code=>:error, :data=>:data})')
       end
+    end
+
+    it 'returns a failure result when called without arguments' do
+      result = Failure()
+      expect(result).to be_failure
+      expect(result.inspect).to eq('Failure(:error)')
     end
   end
 end

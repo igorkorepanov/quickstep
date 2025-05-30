@@ -14,7 +14,7 @@ module Quickstep
       def failure?: -> true
       def inspect: -> String
     end
-    def Success: (untyped) -> Quickstep::Result::Success
-    def Failure: (untyped) -> Quickstep::Result::Failure
+    def Success: (?untyped) -> Quickstep::Result::Success
+    def Failure: (?untyped) -> Quickstep::Result::Failure
   end
 end
