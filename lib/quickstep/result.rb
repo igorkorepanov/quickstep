@@ -5,7 +5,7 @@ module Quickstep
     class Success
       attr_reader :value
 
-      def initialize(value)
+      def initialize(value = nil)
         @value = value
       end
 
@@ -18,14 +18,18 @@ module Quickstep
       end
 
       def inspect
-        "Success(#{value.inspect})"
+        value.nil? ? 'Success()' : "Success(#{value.inspect})"
+      end
+
+      def ==(other)
+        other.is_a?(Success) && other.value == value
       end
     end
 
     class Failure
       attr_reader :value
 
-      def initialize(value)
+      def initialize(value = nil)
         @value = value
       end
 
@@ -38,15 +42,19 @@ module Quickstep
       end
 
       def inspect
-        "Failure(#{value.inspect})"
+        value.nil? ? 'Failure()' : "Failure(#{value.inspect})"
+      end
+
+      def ==(other)
+        other.is_a?(Failure) && other.value == value
       end
     end
 
-    def Success(value = :ok)
+    def Success(value = nil)
       Success.new(value)
     end
 
-    def Failure(value = :error)
+    def Failure(value = nil)
       Failure.new(value)
     end
   end
