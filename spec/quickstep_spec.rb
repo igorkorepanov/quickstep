@@ -34,7 +34,7 @@ RSpec.describe Quickstep do
       private
 
       def step1
-        Success(:ok)
+        Success()
       end
 
       def step2
@@ -42,8 +42,8 @@ RSpec.describe Quickstep do
       end
 
       def step3
-        # it never executes
-        Success(:ok)
+        # this step never executes
+        Success()
       end
     end)
   end
@@ -55,7 +55,7 @@ RSpec.describe Quickstep do
       expect(result.value).to eq(:step_2_ok)
     end
 
-    context 'with error in one of the steps' do
+    context 'when one of the steps fails' do
       let(:operation_with_failure) do
         Class.new do
           include Quickstep
@@ -89,7 +89,7 @@ RSpec.describe Quickstep do
       end
     end
 
-    context 'with another operation' do
+    context 'when composed with another operation' do
       let(:operation) do
         Class.new do
           include Quickstep
@@ -103,12 +103,12 @@ RSpec.describe Quickstep do
           private
 
           def step1
-            Success(:ok)
+            Success()
           end
 
           def step3
             # it never executes
-            Success(:ok)
+            Success()
           end
         end
       end
@@ -121,6 +121,45 @@ RSpec.describe Quickstep do
         expect(result.value).to eq(:second_operation_result)
       end
     end
+
+    it 'wraps a successful response' do
+      operation = Class.new do
+        include Quickstep
+
+        def call
+          :value
+        end
+      end
+
+      result = operation.call
+      expect(result).to be_success
+      expect(result.value).to eq :value
+    end
+
+    it 'unwraps a step result' do
+      operation = Class.new do
+        include Quickstep
+
+        def call(input)
+          step_1_result = step step1(input)
+          step step2(step_1_result)
+        end
+
+        private
+
+        def step1(value)
+          Success(value + 1)
+        end
+
+        def step2(value)
+          Success(value * 2)
+        end
+      end
+
+      result = operation.call(1)
+      expect(result).to be_success
+      expect(result.value).to eq 4
+    end
   end
 
   context 'when calling the operation as an instance' do
@@ -130,7 +169,7 @@ RSpec.describe Quickstep do
       expect(result.value).to eq(:step_2_ok)
     end
 
-    context 'with error in one of the steps' do
+    context 'when one of the steps fails' do
       let(:operation_with_failure) do
         Class.new do
           include Quickstep
@@ -155,6 +194,10 @@ RSpec.describe Quickstep do
             # it never executes
             Success(:last_step)
           end
+
+          def on_failure(failure, step_name)
+            puts "FAIL on #{step_name}: #{failure.inspect}"
+          end
         end
       end
 
@@ -165,7 +208,7 @@ RSpec.describe Quickstep do
       end
     end
 
-    context 'with another operation' do
+    context 'when composed with another operation' do
       let(:operation) do
         Class.new do
           include Quickstep
@@ -179,12 +222,12 @@ RSpec.describe Quickstep do
           private
 
           def step1
-            Success(:ok)
+            Success()
           end
 
           def step3
-            # it never executes
-            Success(:ok)
+            # this step never executes
+            Success()
           end
         end
       end
@@ -196,6 +239,45 @@ RSpec.describe Quickstep do
         expect(result).to be_failure
         expect(result.value).to eq(:second_operation_result)
       end
+    end
+
+    it 'wraps a successful response' do
+      operation = Class.new do
+        include Quickstep
+
+        def call
+          :value
+        end
+      end
+
+      result = operation.new.call
+      expect(result).to be_success
+      expect(result.value).to eq :value
+    end
+
+    it 'unwraps a step result' do
+      operation = Class.new do
+        include Quickstep
+
+        def call(input)
+          step_1_result = step step1(input)
+          step step2(step_1_result)
+        end
+
+        private
+
+        def step1(value)
+          Success(value + 1)
+        end
+
+        def step2(value)
+          Success(value * 2)
+        end
+      end
+
+      result = operation.new.call(1)
+      expect(result).to be_success
+      expect(result.value).to eq 4
     end
   end
 end

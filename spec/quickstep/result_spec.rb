@@ -42,7 +42,7 @@ RSpec.describe Quickstep::Result do
     it 'returns true for Success() with no arguments' do
       result = Success()
       expect(result).to be_success
-      expect(result.inspect).to eq('Success(:ok)')
+      expect(result.inspect).to eq('Success()')
     end
   end
 
@@ -82,10 +82,18 @@ RSpec.describe Quickstep::Result do
       end
     end
 
-    it 'returns a failure result when called without arguments' do
+    it 'returns true for Failure() with no arguments' do
       result = Failure()
       expect(result).to be_failure
-      expect(result.inspect).to eq('Failure(:error)')
+      expect(result.inspect).to eq('Failure()')
+    end
+
+    it 'compares values correctly' do
+      expect(Failure(1)).to eq(Failure(1))
+    end
+
+    it 'does not equal a Failure with a different value' do
+      expect(Failure(1)).not_to eq(Failure(2))
     end
   end
 end

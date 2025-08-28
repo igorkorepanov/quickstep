@@ -25,6 +25,9 @@ Naming/MethodName:
 RSpec/ExampleLength:
   Enabled: false
 
+RSpec/IdenticalEqualityAssertion:
+  Enabled: false
+
 RSpec/MultipleExpectations:
   Max: 10
 

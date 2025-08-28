@@ -13,23 +13,34 @@ module Quickstep
 
   module ClassMethods
     def call(*args)
-      catch :halt do
+      result = catch :halt do
         new.call(*args)
+      end
+      if result.respond_to?(:failure?)
+        result
+      else
+        Quickstep::Result::Success.new(result)
       end
     end
   end
 
   module InstanceMethods
     def call(*args)
-      catch :halt do
+      result = catch :halt do
         super
+      end
+
+      if result.respond_to?(:failure?)
+        result
+      else
+        Quickstep::Result::Success.new(result)
       end
     end
   end
 
   def step(result)
     if result.success?
-      result
+      result.value
     else
       throw :halt, result
     end
